@@ -14,6 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from '@chakra-ui/icons'
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { removeUserSession } from "./Utils/Common"
 
 function Search() {
   const [search, setSearch] = useState("");
@@ -32,8 +34,18 @@ function Search() {
     getPlanet();
   }, [search])
 
+  const Logout = () => {
+    removeUserSession();
+    window.location.href = "/";
+  }
+
   return (
     <>
+      <Flex width="full" justifyContent="center" alignItems="center" height="full">
+        <Box w="100%" maxWidth="1200px" pt={10}>
+          <Button onClick={Logout}>Logout</Button>
+        </Box>
+      </Flex>
       <Flex width="full" justifyContent="center" alignItems="center" height="full">
         <Box w="100%" maxWidth="1200px" pt={10}>
           <Heading>

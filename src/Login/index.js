@@ -9,16 +9,30 @@ import {
   Button
 } from "@chakra-ui/react";
 import { Global } from "@emotion/react";
+import axios from "axios";
 import { withRouter } from "react-router-dom"
 import { setUserSession, generateToken } from "../Utils/Common";
 
 function Login({ history }) {
   const [uname, setUname] = useState('Luke Skywalker');
   const [password, setPassword] = useState('19BBY');
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    setUserSession(generateToken(), uname);
-    history.push("/");
+
+    const { data: { results } } = await axios.get(`https://swapi.dev/api/people/?search=${uname}`);
+
+    const user = results.find(result => {
+      return result.name === uname && result.birth_year === password
+    })
+
+    if (!user) {
+      alert("Wrong user name and password");
+    }
+
+    if (user) {
+      setUserSession(generateToken(), uname);
+      history.push("/");
+    }
   };
 
   return (
